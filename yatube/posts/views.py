@@ -75,7 +75,7 @@ def post_create(request):
     form = PostForm(
         request.POST or None,
         files=request.FILES or None
-        )
+    )
     if not form.is_valid():
         return render(request, template, context)
     post = form.save(commit=False)
@@ -132,9 +132,7 @@ def follow_index(request):
     posts = Post.objects.select_related(
         'author',
         'group',
-        ).filter(
-            author__following__user=request.user
-        )
+    ).filter(author__following__user=request.user)
     context = {
         'page_obj': paginate(request, posts),
     }

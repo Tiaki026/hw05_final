@@ -7,7 +7,7 @@ def page_not_found(request, exception):
         request,
         'includes/core/404.html',
         {'path': request.path}, status=404
-        )
+    )
 
 
 def server_error(request):

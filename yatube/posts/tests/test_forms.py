@@ -29,12 +29,12 @@ class PostFormTest(TestCase):
             author=cls.user,
         )
         cls.small_gif = (
-             b'\x47\x49\x46\x38\x39\x61\x02\x00'
-             b'\x01\x00\x80\x00\x00\x00\x00\x00'
-             b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
-             b'\x00\x00\x00\x2C\x00\x00\x00\x00'
-             b'\x02\x00\x01\x00\x00\x02\x02\x0C'
-             b'\x0A\x00\x3B'
+            b'\x47\x49\x46\x38\x39\x61\x02\x00'
+            b'\x01\x00\x80\x00\x00\x00\x00\x00'
+            b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
+            b'\x00\x00\x00\x2C\x00\x00\x00\x00'
+            b'\x02\x00\x01\x00\x00\x02\x02\x0C'
+            b'\x0A\x00\x3B'
         )
         cls.uploaded = SimpleUploadedFile(
             name='small.gif',
@@ -107,12 +107,12 @@ class PostFormTest(TestCase):
         '''Тест создания записи с картинкой в БД'''
 
         small_gif_two = (
-             b'\x47\x49\x46\x38\x39\x61\x02\x00'
-             b'\x01\x00\x80\x00\x00\x00\x00\x00'
-             b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
-             b'\x00\x00\x00\x2C\x00\x00\x00\x00'
-             b'\x02\x00\x01\x00\x00\x02\x02\x0C'
-             b'\x0A\x00\x3B'
+            b'\x47\x49\x46\x38\x39\x61\x02\x00'
+            b'\x01\x00\x80\x00\x00\x00\x00\x00'
+            b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
+            b'\x00\x00\x00\x2C\x00\x00\x00\x00'
+            b'\x02\x00\x01\x00\x00\x02\x02\x0C'
+            b'\x0A\x00\x3B'
         )
         uploaded_two = SimpleUploadedFile(
             name='small.gif',
@@ -138,7 +138,7 @@ class PostFormTest(TestCase):
 
     def test_context_post_with_img_index(self):
         '''Тест поста с картинкой передается в контексте на главную страницу'''
-        
+
         form_data = {
             'text': 'Тестовый текст под картинкой',
             'image': self.uploaded,
@@ -147,7 +147,7 @@ class PostFormTest(TestCase):
             reverse('posts:index'),
             data=form_data,
             follow=True
-            )
+        )
         post = response.context['page_obj'][0].image
         self.assertEqual(self.post.image, post)
 
@@ -162,10 +162,10 @@ class PostFormTest(TestCase):
             reverse(
                 'posts:profile',
                 kwargs={'username': self.user.username}
-                ),
+            ),
             data=form_data,
             follow=True
-            )
+        )
         post = response.context['page_obj'][0].image
         self.assertEqual(self.post.image, post)
 
@@ -184,7 +184,7 @@ class PostFormTest(TestCase):
             ),
             data=form_data,
             follow=True
-            )
+        )
         post = response.context['page_obj'][0].image
         self.assertEqual(self.post.image, post)
 
@@ -202,7 +202,7 @@ class PostFormTest(TestCase):
             ),
             data=form_data,
             follow=True
-            )
+        )
         post = response.context['posts'].image
         self.assertEqual(self.post.image, post)
 

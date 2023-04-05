@@ -73,7 +73,7 @@ class Post(CreatedModel):
 class Comment(models.Model):
     text = models.TextField(
         verbose_name='Комментарий',
-        )
+    )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
