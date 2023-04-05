@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Об авторе проекта{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <h1>Привет, я автор</h1>
+    <p>
+      Здесь я расскажу немного о себе. Меня зовут Колотиков Евгений.<br>
+      Я учусь в "Яндекс Практикум" на специальность Python-разработчик Backend.<br>
+      Обучение мне нравится и получается выполнять задания. <br>
+      У меня есть домашний питомец. Это попугай корелла. Зовут его Лео. <br>
+      Ему уже 7 лет. <br>
+      А вот кстати сам он:<br>
+      <a href="{% static 'img/leo_parrot/photo_leo.jpg' %}" type="image">
+        <img src="{% static 'img/leo_parrot/photo_leo.jpg' %}" width="400" 
+          height="300" border="0">
+      </a>
+    </p>
+</div>
+{% endblock %} 

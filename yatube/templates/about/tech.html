@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Технологии{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+      <h1>Вот что я умею</h1>
+      <aside class="col-12 col-md-3">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+             Говорю на Python
+          </li>
+          <li class="list-group-item">
+              Дружу с Django
+          </li>
+        </ul>
+      </aside>
+      <article class="col-12 col-md-9">
+        <p>
+          Технологии не стоят на месте - и мы не будем!<br>
+          Работа дается с боем, но никто не обещал, что будет легко<br>
+          Встречалось все: баги, глюки, кривые руки.<br>
+          Но кое-кто мне всегда помогает взбодриться<br>
+          <a href="{% static 'img/leo_parrot/leo_guard.jpg' %}" type="image">
+            <img src="{% static 'img/leo_parrot/leo_guard.jpg' %}" width="400" 
+              height="300" border="0">
+          </a>
+        </p>
+      </article>
+    </div>
+</div>
+{% endblock %} 
