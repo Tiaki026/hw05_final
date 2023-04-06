@@ -23,7 +23,7 @@ class FollowTests(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertTrue(Follow.objects.filter(
             user=self.user, author=self.author).exists())
-        self.assertEqual(follow_count+1, Follow.objects.count())
+        self.assertEqual(follow_count + 1, Follow.objects.count())
 
     def test_authorized_user_unfollow(self):
         '''Авторизованный пользователь может отписываться от авторов.'''
@@ -35,4 +35,4 @@ class FollowTests(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertFalse(Follow.objects.filter(
             user=self.user, author=self.author).exists())
-        self.assertEqual(follow_count-1, Follow.objects.count())
+        self.assertEqual(follow_count - 1, Follow.objects.count())

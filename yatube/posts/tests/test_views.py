@@ -92,7 +92,7 @@ class PostsViewsTests(TestCase):
             reverse('posts:index'),
             data=form_data,
             follow=True
-            )
+        )
         post = response.context['page_obj'][0]
         self.check_post(post)
 
