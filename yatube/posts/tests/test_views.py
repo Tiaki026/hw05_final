@@ -3,6 +3,7 @@ from django.urls import reverse
 from django import forms
 from posts.models import Post, Group, User
 from django.core.cache import cache
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 class PostsViewsTests(TestCase):
@@ -22,6 +23,19 @@ class PostsViewsTests(TestCase):
             text='Тестовый пост',
             group=cls.group,
             author=cls.user,
+        )
+        cls.small_gif = (
+            b'\x47\x49\x46\x38\x39\x61\x02\x00'
+            b'\x01\x00\x80\x00\x00\x00\x00\x00'
+            b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
+            b'\x00\x00\x00\x2C\x00\x00\x00\x00'
+            b'\x02\x00\x01\x00\x00\x02\x02\x0C'
+            b'\x0A\x00\x3B'
+        )
+        cls.uploaded = SimpleUploadedFile(
+            name='small.gif',
+            content=cls.small_gif,
+            content_type='image/gif'
         )
         cls.group_empty = Group.objects.create(
             title='Тестовая пустая группа',
@@ -65,45 +79,77 @@ class PostsViewsTests(TestCase):
         self.assertEqual(compared_post.text, self.post.text)
         self.assertEqual(compared_post.group.title, self.group.title)
         self.assertEqual(compared_post.author, self.user)
+        self.assertEqual(compared_post.image, self.post.image)
 
     def test_index_page_sends_proper_context(self):
-        '''Проверка контекста test_index.'''
-        response = self.authorized_author.get(reverse('posts:index'))
+        '''Проверка контекста главной страницы.'''
+
+        form_data = {
+            'text': 'Тестовый текст под картинкой',
+            'image': self.uploaded,
+        }
+        response = self.authorized_author.get(
+            reverse('posts:index'),
+            data=form_data,
+            follow=True
+            )
         post = response.context['page_obj'][0]
         self.check_post(post)
 
     def test_group_posts_page_sends_proper_context(self):
-        '''Проверка контекста test_group_posts'''
+        '''Проверка контекста страницы группы'''
+
+        form_data = {
+            'text': 'Тестовый текст под картинкой',
+            'image': self.uploaded,
+        }
         response = self.authorized_author.get(
-            reverse('posts:group_list', kwargs={'slug': self.group.slug})
+            reverse('posts:group_list', kwargs={'slug': self.group.slug}),
+            data=form_data,
+            follow=True
         )
         post = response.context['page_obj'][0]
         self.check_post(post)
 
     def test_profile_page_sends_proper_context(self):
-        '''Проверка контекста test_profile'''
+        '''Проверка контекста страницы профиля'''
+
+        form_data = {
+            'text': 'Тестовый текст под картинкой',
+            'image': self.uploaded,
+        }
         response = self.authorized_author.get(
             reverse(
                 'posts:profile',
                 kwargs={'username': self.user.username}
-            )
+            ),
+            data=form_data,
+            follow=True
         )
         post = response.context['page_obj'][0]
         self.check_post(post)
 
     def test_post_detail_page_sends_proper_context(self):
-        '''Проверка контекста test_post_detail.'''
+        '''Проверка контекста страницы поста.'''
+
+        form_data = {
+            'text': 'Тестовый текст под картинкой',
+            'image': self.uploaded,
+        }
         response = self.authorized_author.get(
             reverse(
                 'posts:post_detail',
                 kwargs={'post_id': self.post.id}
-            )
+            ),
+            data=form_data,
+            follow=True
         )
         post = response.context['posts']
         self.check_post(post)
 
     def test_post_create_page_sends_proper_context(self):
-        '''Проверка контекста test_post_create.'''
+        '''Проверка контекста создания поста.'''
+
         fields = {
             'group': forms.fields.ChoiceField,
             'text': forms.fields.CharField,
@@ -126,7 +172,8 @@ class PostsViewsTests(TestCase):
                 )
 
     def test_post_edit_page_sends_proper_context(self):
-        '''Проверка контекста test_post_edit.'''
+        '''Проверка контекста редактирования поста.'''
+
         fields = {
             'group': forms.fields.ChoiceField,
             'text': forms.fields.CharField,
@@ -163,6 +210,7 @@ class PostsViewsTests(TestCase):
 
     def test_one_post_other_group(self):
         '''Проверка поста в другой группе.'''
+
         response = self.authorized_author.get(
             reverse(
                 'posts:group_list',
@@ -178,6 +226,7 @@ class PostsViewsTests(TestCase):
 
     def test_one_post_on_group(self):
         '''Проверка поста в группе.'''
+
         pages = (
             reverse('posts:index'),
             reverse(

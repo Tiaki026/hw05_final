@@ -46,7 +46,7 @@ class CacheIndexTest(TestCase):
         '''Проверка кэша для index.'''
 
         response = self.authorized_author.get(reverse('posts:index'))
-        Post.objects.all().delete()
+        Post.objects.last().delete()
         response_2 = self.authorized_author.get(reverse('posts:index'))
         self.assertEqual(response.content, response_2.content)
         cache.clear()

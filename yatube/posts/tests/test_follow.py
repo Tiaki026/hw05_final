@@ -17,18 +17,22 @@ class FollowTests(TestCase):
     def test_authorized_user_follow(self):
         '''Авторизованный пользователь может подписываться на авторов.'''
 
+        follow_count = Follow.objects.count()
         response = self.client.post(
             reverse('posts:profile_follow', args=[self.author.username]))
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertTrue(Follow.objects.filter(
             user=self.user, author=self.author).exists())
+        self.assertEqual(follow_count+1, Follow.objects.count())
 
     def test_authorized_user_unfollow(self):
         '''Авторизованный пользователь может отписываться от авторов.'''
 
         Follow.objects.create(user=self.user, author=self.author)
+        follow_count = Follow.objects.count()
         response = self.client.post(
             reverse('posts:profile_unfollow', args=[self.author.username]))
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertFalse(Follow.objects.filter(
             user=self.user, author=self.author).exists())
+        self.assertEqual(follow_count-1, Follow.objects.count())

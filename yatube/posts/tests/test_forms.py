@@ -104,24 +104,11 @@ class PostFormTest(TestCase):
         )
 
     def test_create_post_with_img(self):
-        '''Тест создания записи с картинкой в БД'''
+        '''Тест записи с картинкой в БД'''
 
-        small_gif_two = (
-            b'\x47\x49\x46\x38\x39\x61\x02\x00'
-            b'\x01\x00\x80\x00\x00\x00\x00\x00'
-            b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
-            b'\x00\x00\x00\x2C\x00\x00\x00\x00'
-            b'\x02\x00\x01\x00\x00\x02\x02\x0C'
-            b'\x0A\x00\x3B'
-        )
-        uploaded_two = SimpleUploadedFile(
-            name='small.gif',
-            content=small_gif_two,
-            content_type='image/gif'
-        )
         form_data = {
             'text': 'Тестовый текст под картинкой',
-            'image': uploaded_two,
+            'image': self.uploaded,
         }
         self.authorized_author.post(
             reverse(
@@ -133,78 +120,8 @@ class PostFormTest(TestCase):
         create_post = Post.objects.exclude(id=self.post.id).first()
         self.assertEqual(
             create_post.image,
-            f'posts/{uploaded_two}'
+            f'posts/{self.uploaded}'
         )
-
-    def test_context_post_with_img_index(self):
-        '''Тест поста с картинкой передается в контексте на главную страницу'''
-
-        form_data = {
-            'text': 'Тестовый текст под картинкой',
-            'image': self.uploaded,
-        }
-        response = self.authorized_author.get(
-            reverse('posts:index'),
-            data=form_data,
-            follow=True
-        )
-        post = response.context['page_obj'][0].image
-        self.assertEqual(self.post.image, post)
-
-    def test_context_post_with_img_profile(self):
-        '''Тест поста с картинкой передается в контексте на страницу профиля'''
-
-        form_data = {
-            'text': 'Тестовый текст под картинкой',
-            'image': self.uploaded,
-        }
-        response = self.authorized_author.get(
-            reverse(
-                'posts:profile',
-                kwargs={'username': self.user.username}
-            ),
-            data=form_data,
-            follow=True
-        )
-        post = response.context['page_obj'][0].image
-        self.assertEqual(self.post.image, post)
-
-    def test_context_post_with_img_group_list(self):
-        '''Тест поста с картинкой передается в контексте на страницу группы'''
-
-        form_data = {
-            'text': 'Тестовый текст под картинкой',
-            'image': self.uploaded,
-            'group': self.group.id,
-        }
-        response = self.authorized_author.get(
-            reverse(
-                'posts:group_list',
-                kwargs={'slug': self.group.slug}
-            ),
-            data=form_data,
-            follow=True
-        )
-        post = response.context['page_obj'][0].image
-        self.assertEqual(self.post.image, post)
-
-    def test_context_post_with_img_post_detail(self):
-        '''Тест поста с картинкой передается в контексте на страницу поста'''
-
-        form_data = {
-            'text': 'Тестовый текст под картинкой',
-            'image': self.uploaded,
-        }
-        response = self.authorized_author.get(
-            reverse(
-                'posts:post_detail',
-                kwargs={'post_id': self.post.id}
-            ),
-            data=form_data,
-            follow=True
-        )
-        post = response.context['posts'].image
-        self.assertEqual(self.post.image, post)
 
     def test_create_commets_can_user(self):
         '''Проверка создания комментария только пользователям'''
