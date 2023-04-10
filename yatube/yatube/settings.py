@@ -25,10 +25,12 @@ SECRET_KEY = '*k7)ge556ar7eb5z0dc*%#qdviy#3tcb5v%$ucx5cyrv&-fn#j'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    '[::1]',
-    'testserver',
+    'www.tiakitube.pythonanywhere.com',
+    'tiakitube.pythonanywhere.com',
+    # 'localhost',
+    # '127.0.0.1',
+    # '[::1]',
+    # 'testserver',
 ]
 
 CSRF_FAILURE_VIEW = 'core.views.csrf_failure'
